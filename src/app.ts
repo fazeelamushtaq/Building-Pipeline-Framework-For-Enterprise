@@ -83,6 +83,7 @@ const app = async () => {
         ]
 
         const filesListForCreate = [
+            ".model.ts",
             ".controller.ts",
             ".router.ts",
             ".service.ts",
