@@ -41,6 +41,15 @@ const copyFiles = (files: string[], inputPath: string, outputPath: string) => {
     })
 }
 
+const createFiles = (files: string[], service: string, srcPath: string) => {
+    files.forEach((file) => {
+        const fileName = `${service}${file}`
+        const filePath = path.join(srcPath, fileName)
+        fs.writeFileSync(filePath, "")
+    })
+
+}
+
 const app = async () => {
     try {
         const welcomeMessage = chalk.bgMagenta.white.bold(" ---✨✨ Welcome team ! ✨✨---\n")
@@ -61,27 +70,42 @@ const app = async () => {
         const rootPath = process.cwd()
         const pipelinePath = rootPath
 
-        //Create Service Folder
-        const servicePath = path.join(rootPath, serviceName)
-
-        //Create src Folder inside Service Folder
+        const servicePath = path.join(rootPath, serviceName) 
         const srcPath = path.join(servicePath, "src")
-
-        //Create app.ts inside src Folder
         const appFilePath = path.join(srcPath, "app.ts")
 
         const filesListForCopy = [
             ".env",
             "Dockerfile",
             "package.json",
-            "tsconfig.json"
+            "tsconfig.json",
+            ".gitignore"
         ]
 
+        const filesListForCreate = [
+            ".controller.ts",
+            ".router.ts",
+            ".service.ts",
+            ".interface.ts",
+            ".middleware.ts",
+            ".enum.ts",
+            ".dto.ts"
+        ]
+
+        // Create Service Folder
         makeFolder(servicePath)
+
+        // Create src Folder inside Service Folder
         makeFolder(srcPath)
+
+        // Create app.ts inside src Folder
         fs.writeFileSync(appFilePath, "")
 
+        // copy all required files for typescipt
         copyFiles(filesListForCopy, pipelinePath, servicePath)
+
+        // Create required files for start coding
+        createFiles(filesListForCreate, serviceName, srcPath)
 
         log(chalk.bgGreen.black.bold(`Success - ${serviceName} created successfully\n`))
         exitApp()
