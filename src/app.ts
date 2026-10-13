@@ -67,8 +67,9 @@ const app = async () => {
             exitApp("Pipeline name not allowed")
 
         const serviceName = validateService(service)
-        const rootPath = process.cwd()
-        const pipelinePath = rootPath
+        const dirPath = process.cwd()
+        const rootPath = path.dirname(dirPath)
+        const pipelinePath = dirPath
 
         const servicePath = path.join(rootPath, serviceName) 
         const srcPath = path.join(servicePath, "src")
@@ -93,6 +94,7 @@ const app = async () => {
             ".dto.ts"
         ]
 
+        
         // Create Service Folder
         makeFolder(servicePath)
 
@@ -107,6 +109,8 @@ const app = async () => {
 
         // Create required files for start coding
         createFiles(filesListForCreate, serviceName, srcPath)
+
+  
 
         log(chalk.bgGreen.black.bold(`Success - ${serviceName} created successfully\n`))
         exitApp()
